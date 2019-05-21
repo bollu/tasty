@@ -43,9 +43,9 @@ patternTests = testGroup "Patterns"
   , testCase "AWK expression"
       (o "$3 ~ /r/ || $2 != \"Europe\"" @?= ["Tests.Europe.Paris","Tests.Europe.Berlin","Tests.North America.Ottawa","Tests.North America.Washington DC"])
   , testCase "Simple ERE is parsed as such" $ -- #220
-      parseTestPattern "/foo/" @?= Just (TestPattern (Just (ERE "foo")))
+      parseTestPattern "/foo/" @?= Just (TestWhitelist (Just (ERE "foo")))
   , testCase "Dashes are acceptable in raw patterns" $ -- #220
-      parseTestPattern "type-checking" @?= Just (TestPattern (Just (ERE "type-checking")))
+      parseTestPattern "type-checking" @?= Just (TestWhitelist (Just (ERE "type-checking")))
   , testCase ". is a field separator (works as a raw pattern)" $
       (o "ca.Ot" @?= ["Tests.North America.Ottawa"])
   , testCase ". is a field separator (works inside an AWK expression)" $

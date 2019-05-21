@@ -90,6 +90,6 @@ mkTimeout n =
 -- 'TestPattern' and 'Timeout'.
 coreOptions :: [OptionDescription]
 coreOptions =
-  [ Option (Proxy :: Proxy TestPattern)
+  [ Option (Proxy :: Proxy TestWhitelist)
   , Option (Proxy :: Proxy Timeout)
   ]

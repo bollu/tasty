@@ -3,7 +3,7 @@
 {-# LANGUAGE CPP, DeriveDataTypeable #-}
 
 module Test.Tasty.Patterns
-  ( TestPattern(..)
+  ( TestWhitelist(..)
   , parseExpr
   , parseTestPattern
   , noPattern
@@ -24,13 +24,13 @@ import Options.Applicative hiding (Success)
 import Data.Monoid
 #endif
 
-newtype TestPattern = TestPattern (Maybe Expr)
+newtype TestWhitelist = TestWhitelist (Maybe Expr)
   deriving (Typeable, Show, Eq)
 
-noPattern :: TestPattern
-noPattern = TestPattern Nothing
+noPattern :: TestWhitelist
+noPattern = TestWhitelist Nothing
 
-instance IsOption TestPattern where
+instance IsOption TestWhitelist where
   defaultValue = noPattern
   parseValue = parseTestPattern
   optionName = return "pattern"
@@ -43,10 +43,10 @@ parseExpr s
     Just $ ERE s
   | otherwise = parseAwkExpr s
 
-parseTestPattern :: String -> Maybe TestPattern
+parseTestPattern :: String -> Maybe TestWhitelist
 parseTestPattern s
   | null s = Just noPattern
-  | otherwise = TestPattern . Just <$> parseExpr s
+  | otherwise = TestWhitelist . Just <$> parseExpr s
 
 exprMatches :: Expr -> Path -> Bool
 exprMatches e fields =
@@ -54,8 +54,8 @@ exprMatches e fields =
     Left msg -> error msg
     Right b -> b
 
-testPatternMatches :: TestPattern -> Path -> Bool
+testPatternMatches :: TestWhitelist -> Path -> Bool
 testPatternMatches pat fields =
   case pat of
-    TestPattern Nothing -> True
-    TestPattern (Just e) -> exprMatches e fields
+    TestWhitelist Nothing -> True
+    TestWhitelist (Just e) -> exprMatches e fields
